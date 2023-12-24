@@ -12,7 +12,7 @@ from functions import (
 )
 from functions import (
     FullFaceDetector,
-    load_yolo_model_obj,
+    ObjectDetectionYOLO,
     MediaPipeObjectDetection,
     MediaPipeImageClassification,
     MediaPipeFaceDetector
@@ -28,7 +28,8 @@ option_menu()
 
 grid_title = grid([5, 1], vertical_align = True)
 container1 = grid_title.container()
-container1.title("$$\\large{\\textbf{COELHO VISION | Object Detection}}$$")
+container1.title("$$\\large{\\textbf{COELHO VISION}}$$")
+container1.write("$$\\Huge{\\textit{\\textbf{Object Detection}}}$$")
 container1.caption("Author: Rafael Silva Coelho")
 
 page_buttons()
@@ -127,14 +128,13 @@ if role_filter == "Full Face Detection":
         mode_filter == "Image" and uploaded_image is not None) or (
         mode_filter == "Camera" and cam_image is not None    
         ):
-        transformed_image = detector.transform(
-            opencv_image,
-            face_scaleFactor,
-            eye_scaleFactor,
-            mouth_scaleFactor,
-            face_minNeighbors,
-            eye_minNeighbors,
-            mouth_minNeighbors)
+        detector.face_scaleFactor = face_scaleFactor
+        detector.eye_scaleFactor = eye_scaleFactor
+        detector.mouth_scaleFactor = mouth_scaleFactor
+        detector.face_minNeighbors = face_minNeighbors
+        detector.eye_minNeighbors = eye_minNeighbors
+        detector.mouth_minNeighbors = mouth_minNeighbors
+        transformed_image = detector.transform(opencv_image)
         grid2.image(transformed_image, use_column_width = True)
 elif role_filter == "Image Classification (VGG16)":
     if (
@@ -160,7 +160,7 @@ elif role_filter == "Image Classification (VGG16)":
         grid2_cols = grid2.columns(5)
         for i in range(5):
             grid2_cols[i].metric(
-                label = P[0][i][1],
+                label = P[0][i][1].replace("_", " ").title(),
                 value = "{:.2f}%".format(P[0][i][2] * 100)
             )
         grid2.image(opencv_image, use_column_width = True)
@@ -179,16 +179,16 @@ elif role_filter == "Object Detection (YOLOv8)":
         mode_filter == "Image" and uploaded_image is not None) or (
         mode_filter == "Camera" and cam_image is not None    
         ):
-        with st.spinner("Loading the model"):
-            model = load_yolo_model_obj(model_size)
-        results = model.predict(opencv_image)
+        model = ObjectDetectionYOLO()
+        model.model_size = model_size
+        results = model.model.predict(opencv_image)
         for r in results:    
             annotator = Annotator(opencv_image)
             boxes = r.boxes
             for box in boxes:
                 b = box.xyxy[0]  # get box coordinates in (left, top, right, bottom) format
                 c = box.cls
-                annotator.box_label(b, model.names[int(c)], color = (255, 0, 0), txt_color = (255, 255, 255))      
+                annotator.box_label(b, model.model.names[int(c)], color = (255, 0, 0), txt_color = (255, 255, 255))      
         img = annotator.result()
         grid2.header(role_filter)
         grid2.image(img, use_column_width = True)
@@ -202,7 +202,8 @@ elif role_filter == "Object Detection (MediaPipe)":
         mode_filter == "Camera" and cam_image is not None    
         ):
         model = MediaPipeObjectDetection()
-        img = model.transform(opencv_image, text_color)
+        model.text_color = text_color
+        img = model.transform(opencv_image)
         grid2.image(img, use_column_width = True)
 elif role_filter == "Image Classification (MediaPipe)":
     if (
@@ -215,7 +216,7 @@ elif role_filter == "Image Classification (MediaPipe)":
         grid2_cols = grid2.columns(len(results.classifications[0].categories))
         for i in range(len(results.classifications[0].categories)):
             grid2_cols[i].metric(
-                label = results.classifications[0].categories[i].category_name,
+                label = results.classifications[0].categories[i].category_name.title(),
                 value = "{:.2f}%".format(results.classifications[0].categories[i].score * 100)
             )
         grid2.image(opencv_image, use_column_width = True)

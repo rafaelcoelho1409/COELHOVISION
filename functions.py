@@ -12,7 +12,8 @@ from mediapipe.framework.formats import landmark_pb2
 from urllib.request import urlretrieve
 import os 
 from ultralytics import YOLO
-from ultralytics.utils.plotting import Annotator
+from ultralytics.utils.plotting import Annotator, colors
+from ultralytics.solutions import ai_gym, heatmap
 from st_pages import show_pages, Page, Section, add_indentation
 from streamlit_extras.switch_page_button import switch_page
 
@@ -22,13 +23,14 @@ def option_menu():
         Page("pages/object_detection.py", "Object Detection"),
         Page("pages/image_segmentation.py", "Image Segmentation"),
         Page("pages/pose_estimation.py", "Pose Estimation"),
-        Page("pages/live_camera.py", "Live Camera")
+        Page("pages/live_camera.py", "Live Camera"),
+        Page("pages/about.py", "About Us")
     ])
     add_indentation()
 
 def page_buttons():
     st.write(" ")
-    cols_ = st.columns(5)
+    cols_ = st.columns(6)
     with cols_[0]:
         HOME = st.button(
             label = "$$\\textbf{Home}$$",
@@ -49,6 +51,10 @@ def page_buttons():
         LIVE_CAMERA = st.button(
             label = "$$\\textbf{Live Camera}$$",
             use_container_width = True)
+    with cols_[5]:
+        ABOUT_US = st.button(
+            label = "$$\\textbf{About Us}$$",
+            use_container_width = True)
     if HOME:
         switch_page("home")
     if OBJECT_DETECTION:
@@ -59,6 +65,8 @@ def page_buttons():
         switch_page("pose estimation")
     if LIVE_CAMERA:
         switch_page("live camera")
+    if ABOUT_US:
+        switch_page("about")
 
 def image_border_radius(image_path, border_radius, width, height, page_object = None, is_html = False):
     if is_html == False:
@@ -82,6 +90,9 @@ def image_border_radius(image_path, border_radius, width, height, page_object = 
 
 ############################################################################################
 #COMPUTER VISION
+def Hex_to_RGB(ip):
+    return tuple(int(ip[i:i+2],16) for i in (0, 2, 4))
+
 class FullFaceDetector:
     def __init__(self):
         self.face_detector = cv2.CascadeClassifier(
@@ -94,19 +105,19 @@ class FullFaceDetector:
         )
         self.font_scale = 0.5
         self.font = cv2.FONT_HERSHEY_COMPLEX_SMALL
+        self.face_scaleFactor = 1.50
+        self.eye_scaleFactor = 1.30
+        self.mouth_scaleFactor = 3.00
+        self.face_minNeighbors = 5
+        self.eye_minNeighbors = 7
+        self.mouth_minNeighbors = 10
     def transform(
             self, 
-            img,
-            face_scaleFactor = 1.50, 
-            eye_scaleFactor = 1.30, 
-            mouth_scaleFactor = 3.00,
-            face_minNeighbors = 5,
-            eye_minNeighbors = 7,
-            mouth_minNeighbors = 10):
+            img):
             gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            faces = self.face_detector.detectMultiScale(gray_img, face_scaleFactor, face_minNeighbors)
-            eyes = self.eye_detector.detectMultiScale(gray_img, eye_scaleFactor, eye_minNeighbors)
-            mouths = self.mouth_detector.detectMultiScale(gray_img, mouth_scaleFactor, mouth_minNeighbors)
+            faces = self.face_detector.detectMultiScale(gray_img, self.face_scaleFactor, self.face_minNeighbors)
+            eyes = self.eye_detector.detectMultiScale(gray_img, self.eye_scaleFactor, self.eye_minNeighbors)
+            mouths = self.mouth_detector.detectMultiScale(gray_img, self.mouth_scaleFactor, self.mouth_minNeighbors)
             for detector, color, name in [
                 (faces, (255, 0, 0), "Face"), 
                 (eyes, (0, 255, 0), "Eye"),
@@ -121,37 +132,59 @@ class FullFaceDetector:
                     img = cv2.putText(img, name, (x, y - 5), self.font, self.font_scale, (0,0,0), 1)
             return img
     
-@st.cache_resource
-def load_yolo_model_obj(model_size):
-    model_name_dict = {
-        "Nano": "yolov8n.pt",
-        "Small": "yolov8s.pt",
-        "Medium": "yolov8m.pt",
-        "Large": "yolov8l.pt",
-        "Extra Large": "yolov8x.pt"
-    }
-    model = YOLO(model_name_dict[model_size])
-    return model
+class ObjectDetectionYOLO:
+    def __init__(self):
+        self.model_size = "Nano"
+        self.model_name_dict = {
+            "Nano": "yolov8n.pt",
+            "Small": "yolov8s.pt",
+            "Medium": "yolov8m.pt",
+            "Large": "yolov8l.pt",
+            "Extra Large": "yolov8x.pt"
+        }
+        self.model = YOLO(self.model_name_dict[self.model_size])
+    def transform(self, original_image):
+        results = self.model.predict(original_image)
+        for r in results:    
+            annotator = Annotator(original_image)
+            boxes = r.boxes
+            for box in boxes:
+                b = box.xyxy[0]  # get box coordinates in (left, top, right, bottom) format
+                c = box.cls
+                annotator.box_label(b, self.model.model.names[int(c)], color = (255, 0, 0), txt_color = (255, 255, 255))      
+        img = annotator.result()
+        return img
 
-@st.cache_resource
-def load_yolo_model_seg(model_size):
-    model_name_dict = {
-        "Nano": "yolov8n-seg.pt",
-        "Small": "yolov8s-seg.pt",
-        "Medium": "yolov8m-seg.pt",
-        "Large": "yolov8l-seg.pt",
-        "Extra Large": "yolov8x-seg.pt"
-    }
-    model = YOLO(model_name_dict[model_size])
-    return model
+class ImageSegmentationYOLO:
+    def __init__(self):
+        self.model_size = "Nano"
+        self.model_name_dict = {
+            "Nano": "yolov8n-seg.pt",
+            "Small": "yolov8s-seg.pt",
+            "Medium": "yolov8m-seg.pt",
+            "Large": "yolov8l-seg.pt",
+            "Extra Large": "yolov8x-seg.pt"
+        }
+        self.model = YOLO(self.model_name_dict[self.model_size])
+    def transform(self, original_image):
+        names = self.model.model.names
+        results = self.model.predict(original_image)
+        clss = results[0].boxes.cls.cpu().tolist()
+        masks = results[0].masks.xy
+        annotator = Annotator(original_image, line_width=2)
+        for mask, cls in zip(masks, clss):
+            annotator.seg_bbox(
+                mask = mask,
+                mask_color = colors(int(cls), True),
+                det_label = names[int(cls)])
+        img = annotator.result()
+        return img
 
-def Hex_to_RGB(ip):
-    return tuple(int(ip[i:i+2],16) for i in (0, 2, 4))
 
 class MediaPipeObjectDetection:
     def __init__(self):
-        pass
-    def visualize(self, image, detection_result, text_color):
+        self.text_color = (0, 0, 0)
+    def visualize(self, image, detection_result):
         MARGIN = 10  # pixels
         ROW_SIZE = 10  # pixels
         FONT_SIZE = 1
@@ -161,7 +194,7 @@ class MediaPipeObjectDetection:
             bbox = detection.bounding_box
             start_point = bbox.origin_x, bbox.origin_y
             end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
-            cv2.rectangle(image, start_point, end_point, text_color, 3)   
+            cv2.rectangle(image, start_point, end_point, self.text_color, 3)   
             # Draw label and score
             category = detection.categories[0]
             category_name = category.category_name
@@ -170,9 +203,9 @@ class MediaPipeObjectDetection:
             text_location = (MARGIN + bbox.origin_x,
                              MARGIN + ROW_SIZE + bbox.origin_y)
             cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                        FONT_SIZE, text_color, FONT_THICKNESS)    
+                        FONT_SIZE, self.text_color, FONT_THICKNESS)    
         return image
-    def transform(self, original_image, text_color):
+    def transform(self, original_image):
         #Create an ObjectDetector object
         if "efficientdet.tflite" not in os.listdir():
             url = "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/int8/1/efficientdet_lite0.tflite"
@@ -193,7 +226,7 @@ class MediaPipeObjectDetection:
         detection_result = detector.detect(image)
         #Process the detection result
         image_copy = np.copy(image.numpy_view())
-        annotated_image = self.visualize(image_copy, detection_result, text_color)
+        annotated_image = self.visualize(image_copy, detection_result)
         return annotated_image
 
 
@@ -225,8 +258,9 @@ class MediaPipeImageClassification:
 
 class MediaPipeImageSegmentation:
     def __init__(self):
-        pass
-    def transform(self, original_image, mask_color, background_color):
+        self.mask_color = None
+        self.background_color = None
+    def transform(self, original_image):
         if "deeplabv3.tflite" not in os.listdir():
             url = "https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/1/deeplab_v3.tflite"
             filename = "deeplabv3.tflite"
@@ -250,9 +284,9 @@ class MediaPipeImageSegmentation:
             # Generate solid color images for showing the output segmentation mask.
             image_data = image.numpy_view()
             fg_image = np.zeros(image_data.shape, dtype=np.uint8)
-            fg_image[:] = Hex_to_RGB(mask_color[1:])
+            fg_image[:] = Hex_to_RGB(self.mask_color[1:])
             bg_image = np.zeros(image_data.shape, dtype=np.uint8)
-            bg_image[:] = Hex_to_RGB(background_color[1:])
+            bg_image[:] = Hex_to_RGB(self.background_color[1:])
             condition = np.stack((category_mask.numpy_view(),) * 3, axis=-1) > 0.2
             output_image = np.where(condition, fg_image, bg_image)
         return output_image
@@ -287,7 +321,7 @@ class MediaPipeHandLandmarker:
         MARGIN = 10  # pixels
         FONT_SIZE = 1
         FONT_THICKNESS = 1
-        HANDEDNESS_TEXT_COLOR = (88, 205, 54) # vibrant green
+        HANDEDNESS_TEXT_COLOR = (255, 0, 0)
         hand_landmarks_list = detection_result.hand_landmarks
         handedness_list = detection_result.handedness
         annotated_image = np.copy(rgb_image)
@@ -439,3 +473,8 @@ class MediaPipePoseEstimation:
         detection_result = detector.detect(image)
         annotated_image = self.draw_landmarks_on_image(image.numpy_view(), detection_result)
         return annotated_image
+    
+
+
+
+

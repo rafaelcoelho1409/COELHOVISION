@@ -23,7 +23,8 @@ option_menu()
 
 grid_title = grid([5, 1], vertical_align = True)
 container1 = grid_title.container()
-container1.title("$$\\large{\\textbf{COELHO VISION | Pose Estimation}}$$")
+container1.title("$$\\large{\\textbf{COELHO VISION}}$$")
+container1.write("$$\\Huge{\\textit{\\textbf{Pose Estimation}}}$$")
 container1.caption("Author: Rafael Silva Coelho")
 
 page_buttons()
@@ -82,7 +83,7 @@ if role_filter == "Gesture Recognition":
             grid2_cols = grid2.columns(len(recognition_result.gestures[0]))
             for i in range(len(recognition_result.gestures[0])):
                 grid2_cols[i].metric(
-                    label = recognition_result.gestures[0][i].category_name,
+                    label = recognition_result.gestures[0][i].category_name.replace("_", " ").title()   ,
                     value = "{:.2f}%".format(recognition_result.gestures[0][i].score * 100)
                 )
         grid2.image(opencv_image, use_column_width = True)

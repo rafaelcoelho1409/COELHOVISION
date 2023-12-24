@@ -10,7 +10,7 @@ from functions import (
     Hex_to_RGB
 )
 from functions import (
-    load_yolo_model_seg,
+    ImageSegmentationYOLO,
     MediaPipeImageSegmentation
 )
 
@@ -24,7 +24,8 @@ option_menu()
 
 grid_title = grid([5, 1], vertical_align = True)
 container1 = grid_title.container()
-container1.title("$$\\textbf{COELHO VISION | Image Segmentation}$$")
+container1.title("$$\\large{\\textbf{COELHO VISION}}$$")
+container1.write("$$\\Huge{\\textit{\\textbf{Image Segmentation}}}$$")
 container1.caption("Author: Rafael Silva Coelho")
 
 page_buttons()
@@ -83,18 +84,9 @@ if role_filter == "Image Segmentation (YOLOv8)":
         mode_filter == "Image" and uploaded_image is not None) or (
         mode_filter == "Camera" and cam_image is not None    
         ):
-        model = load_yolo_model_seg(model_size)
-        names = model.model.names
-        results = model.predict(opencv_image)
-        clss = results[0].boxes.cls.cpu().tolist()
-        masks = results[0].masks.xy
-        annotator = Annotator(opencv_image, line_width=2)
-        for mask, cls in zip(masks, clss):
-            annotator.seg_bbox(
-                mask = mask,
-                mask_color = colors(int(cls), True),
-                det_label = names[int(cls)])
-        img = annotator.result()
+        model = ImageSegmentationYOLO()
+        model.model_size = model_size
+        img = model.transform(opencv_image)
         grid2.header(role_filter)
         grid2.image(img, use_column_width = True)
 elif role_filter == "Image Segmentation (MediaPipe)":
@@ -111,7 +103,9 @@ elif role_filter == "Image Segmentation (MediaPipe)":
         mode_filter == "Camera" and cam_image is not None    
         ):
         model = MediaPipeImageSegmentation()
-        img = model.transform(opencv_image, mask_color_picker, background_color_picker)
+        model.mask_color = mask_color_picker
+        model.background_color = background_color_picker
+        img = model.transform(opencv_image)
         grid1.image(opencv_image, use_column_width = True)
         grid2.subheader(role_filter)
         grid2.image(img, use_column_width = True)
