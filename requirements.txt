@@ -8,3 +8,4 @@ streamlit_extras==0.3.6
 streamlit_webrtc==0.47.1
 tensorflow==2.15.0.post1
 ultralytics==8.0.229
+shapely==2.0.2
