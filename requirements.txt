@@ -1,0 +1,11 @@
+av==11.0.0
+mediapipe==0.10.9
+numpy==1.23.5
+opencv_contrib_python==4.8.1.78
+opencv_python==4.8.1.78
+st_pages==0.4.5
+streamlit==1.28.2
+streamlit_extras==0.3.6
+streamlit_webrtc==0.47.1
+tensorflow==2.15.0.post1
+ultralytics==8.0.229
