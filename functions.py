@@ -134,15 +134,7 @@ class FullFaceDetector:
     
 class ObjectDetectionYOLO:
     def __init__(self):
-        self.model_size = "Nano"
-        self.model_name_dict = {
-            "Nano": "yolov8n.pt",
-            "Small": "yolov8s.pt",
-            "Medium": "yolov8m.pt",
-            "Large": "yolov8l.pt",
-            "Extra Large": "yolov8x.pt"
-        }
-        self.model = YOLO(self.model_name_dict[self.model_size])
+        self.model = YOLO("yolov8n.pt")
     def transform(self, original_image):
         results = self.model.predict(original_image)
         for r in results:    
@@ -157,15 +149,7 @@ class ObjectDetectionYOLO:
 
 class ImageSegmentationYOLO:
     def __init__(self):
-        self.model_size = "Nano"
-        self.model_name_dict = {
-            "Nano": "yolov8n-seg.pt",
-            "Small": "yolov8s-seg.pt",
-            "Medium": "yolov8m-seg.pt",
-            "Large": "yolov8l-seg.pt",
-            "Extra Large": "yolov8x-seg.pt"
-        }
-        self.model = YOLO(self.model_name_dict[self.model_size])
+        self.model = YOLO("yolov8n-seg.pt")
     def transform(self, original_image):
         names = self.model.model.names
         results = self.model.predict(original_image)

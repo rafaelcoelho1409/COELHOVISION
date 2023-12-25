@@ -70,22 +70,11 @@ elif mode_filter == "Camera":
         opencv_image = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)
 
 if role_filter == "Image Segmentation (YOLOv8)":
-    model_size = grid1.selectbox(
-        label = "YOLO Model Size",
-        options = [
-            "Nano",
-            "Small",
-            "Medium",
-            "Large",
-            "Extra Large"
-        ]
-    )
     if (
         mode_filter == "Image" and uploaded_image is not None) or (
         mode_filter == "Camera" and cam_image is not None    
         ):
         model = ImageSegmentationYOLO()
-        model.model_size = model_size
         img = model.transform(opencv_image)
         grid2.header(role_filter)
         grid2.image(img, use_column_width = True)

@@ -165,22 +165,11 @@ elif role_filter == "Image Classification (VGG16)":
             )
         grid2.image(opencv_image, use_column_width = True)
 elif role_filter == "Object Detection (YOLOv8)":
-    model_size = grid1.selectbox(
-        label = "YOLO Model Size",
-        options = [
-            "Nano",
-            "Small",
-            "Medium",
-            "Large",
-            "Extra Large"
-        ]
-    )
     if (
         mode_filter == "Image" and uploaded_image is not None) or (
         mode_filter == "Camera" and cam_image is not None    
         ):
         model = ObjectDetectionYOLO()
-        model.model_size = model_size
         results = model.model.predict(opencv_image)
         for r in results:    
             annotator = Annotator(opencv_image)

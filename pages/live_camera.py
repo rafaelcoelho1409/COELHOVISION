@@ -118,18 +118,7 @@ if task_filter == "Object Detection":
         model.eye_minNeighbors = eye_minNeighbors
         model.mouth_minNeighbors = mouth_minNeighbors
     elif role_filter == "Object Detection (YOLOv8)":
-        model_size = grid1.selectbox(
-            label = "YOLO Model Size",
-            options = [
-                "Nano",
-                "Small",
-                "Medium",
-                "Large",
-                "Extra Large"
-            ]
-        )
         model = ObjectDetectionYOLO()
-        model.model_size = model_size
     elif role_filter == "Object Detection (MediaPipe)":
         text_color_picker = grid1.color_picker(
             label = "Set a color to bounding boxes and text"
@@ -148,18 +137,7 @@ elif task_filter == "Image Segmentation":
     ]
     )
     if role_filter == "Image Segmentation (YOLOv8)":
-        model_size = grid1.selectbox(
-            label = "YOLO Model Size",
-            options = [
-                "Nano",
-                "Small",
-                "Medium",
-                "Large",
-                "Extra Large"
-            ]
-        )
         model = ImageSegmentationYOLO()
-        model.model_size = model_size
     elif role_filter == "Image Segmentation (MediaPipe)":
         background_color_picker = grid1.color_picker(
             label = "Set a color to background",
