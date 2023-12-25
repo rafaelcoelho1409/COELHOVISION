@@ -78,3 +78,16 @@ for i, x in enumerate([
     with cols3[i]:
         image_border_radius(images_json[x], 10, 100, 25, is_html = True)
         st.caption(x)
+st.divider()
+
+with st.expander(
+    label = "COELHO VISION",
+    expanded = True
+):
+    cols1 = grid(5)
+    cols2 = grid(5)
+    for i in range(1, 6):
+        cols1.image(f"assets/coelhovision{i:0>2}.png")
+    for i in range(6, 11):
+        cols2.image(f"assets/coelhovision{i:0>2}.png")
+st.divider()
