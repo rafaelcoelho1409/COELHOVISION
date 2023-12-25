@@ -46,7 +46,7 @@ if POSE_ESTIMATION:
 if LIVE_CAMERA:
     switch_page("live camera")
 if ABOUT_US:
-    switch_page("about us")
+    switch_page("about")
 
 images_json = json.load(open("assets/images.json"))
 second_column.latex("\\Huge{\\textbf{COELHO VISION}}")
