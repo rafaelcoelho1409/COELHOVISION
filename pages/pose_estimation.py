@@ -36,8 +36,8 @@ grid_filters = grid(2, vertical_align = True)
 mode_filter = grid_filters.selectbox(
     label = "Mode",
     options = [
-        "Image",
-        "Camera"
+        "Camera",
+        "Image"
     ]
 )
 role_filter = grid_filters.selectbox(
