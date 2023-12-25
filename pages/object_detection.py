@@ -193,7 +193,7 @@ elif role_filter == "Object Detection (MediaPipe)":
         model = MediaPipeObjectDetection()
         model.text_color = text_color
         img = model.transform(opencv_image)
-        grid.subheader(role_filter)
+        grid2.subheader(role_filter)
         grid2.image(img, use_column_width = True)
 elif role_filter == "Image Classification (MediaPipe)":
     if (
