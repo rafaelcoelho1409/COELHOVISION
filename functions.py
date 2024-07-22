@@ -74,7 +74,7 @@ def page_buttons():
     if LIVE_CAMERA:
         switch_page("live camera")
     if ABOUT_US:
-        switch_page("about")
+        switch_page("about us")
 
 def image_border_radius(image_path, border_radius, width, height, page_object = None, is_html = False):
     if is_html == False:
