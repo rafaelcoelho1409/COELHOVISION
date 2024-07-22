@@ -10,7 +10,8 @@ from functions import (
 from functions import (
     MediaPipeGestureRecognition,
     MediaPipeHandLandmarker,
-    MediaPipePoseEstimation
+    MediaPipePoseEstimation,
+    OpenVINOPoseEstimation
 )
 
 st.set_page_config(
@@ -45,7 +46,8 @@ role_filter = grid_filters.selectbox(
     options = [
         "Gesture Recognition",
         "Hand Landmarker",
-        "Pose Estimation (MediaPipe)"
+        "Pose Estimation (MediaPipe)",
+        "Pose Estimation (OpenVINO)"
     ]
 )
 
@@ -102,6 +104,15 @@ elif role_filter == "Pose Estimation (MediaPipe)":
         mode_filter == "Camera" and cam_image is not None    
         ):
         model = MediaPipePoseEstimation()
+        img = model.transform(opencv_image)
+        grid2.subheader(role_filter)
+        grid2.image(img, use_column_width = True)
+elif role_filter == "Pose Estimation (OpenVINO)":
+    if (
+        mode_filter == "Image" and uploaded_image is not None) or (
+        mode_filter == "Camera" and cam_image is not None    
+        ):
+        model = OpenVINOPoseEstimation()
         img = model.transform(opencv_image)
         grid2.subheader(role_filter)
         grid2.image(img, use_column_width = True)

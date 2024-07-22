@@ -14,10 +14,15 @@ from functions import (
     ObjectDetectionYOLO,
     MediaPipeObjectDetection,
     MediaPipeFaceDetector,
+    RFObjectDetection,
+    RFTracking,
     ImageSegmentationYOLO,
     MediaPipeImageSegmentation,
+    OpenVINODepthEstimation,
+    OpenVINOImageSegmentation,
     MediaPipeHandLandmarker,
-    MediaPipePoseEstimation
+    MediaPipePoseEstimation,
+    OpenVINOPoseEstimation
 )
 
 st.set_page_config(
@@ -63,7 +68,9 @@ if task_filter == "Object Detection":
         "Full Face Detection",
         "Object Detection (YOLOv8)",
         "Object Detection (MediaPipe)",
-        "Face Detector (MediaPipe)"
+        "Face Detector (MediaPipe)",
+        "Object Detection (RoboFlow)",
+        "Object Tracking (RoboFlow)"
     ]
     )
     if role_filter == "Full Face Detection":
@@ -128,12 +135,18 @@ if task_filter == "Object Detection":
         model.text_color = text_color
     elif role_filter == "Face Detector (MediaPipe)":
         model = MediaPipeFaceDetector()
+    elif role_filter == "Object Detection (RoboFlow)":
+        model = RFObjectDetection()
+    elif role_filter == "Object Tracking (RoboFlow)":
+        model = RFTracking()
 elif task_filter == "Image Segmentation":
     role_filter = grid1.selectbox(
         label = "Role",
         options = [
         "Image Segmentation (YOLOv8)",
-        "Image Segmentation (MediaPipe)"
+        "Image Segmentation (MediaPipe)",
+        "Depth Estimation (OpenVINO)",
+        "Image Segmentation (OpenVINO)"
     ]
     )
     if role_filter == "Image Segmentation (YOLOv8)":
@@ -150,18 +163,25 @@ elif task_filter == "Image Segmentation":
         model = MediaPipeImageSegmentation()
         model.background_color = background_color_picker
         model.mask_color = mask_color_picker
+    elif role_filter == "Depth Estimation (OpenVINO)":
+        model = OpenVINODepthEstimation()
+    elif role_filter == "Image Segmentation (OpenVINO)":
+        model = OpenVINOImageSegmentation()
 elif task_filter == "Pose Estimation":
     role_filter = grid1.selectbox(
         label = "Role",
         options = [
         "Hand Landmarker",
-        "Pose Estimation (MediaPipe)"
+        "Pose Estimation (MediaPipe)",
+        "Pose Estimation (OpenVINO)"
     ]
     )
     if role_filter == "Hand Landmarker":
         model = MediaPipeHandLandmarker()
     elif role_filter == "Pose Estimation (MediaPipe)":
         model = MediaPipePoseEstimation()
+    elif role_filter == "Pose Estimation (OpenVINO)":
+        model = OpenVINOPoseEstimation()
 
 
 

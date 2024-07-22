@@ -3,4 +3,5 @@ yolov8*
 *.ipynb
 *.task
 *.tflite
-venv
+*_env/
+models/

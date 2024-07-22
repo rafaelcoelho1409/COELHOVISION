@@ -15,7 +15,9 @@ from functions import (
     ObjectDetectionYOLO,
     MediaPipeObjectDetection,
     MediaPipeImageClassification,
-    MediaPipeFaceDetector
+    MediaPipeFaceDetector,
+    RFObjectDetection,
+    RFTracking
 )
 
 st.set_page_config(
@@ -53,7 +55,9 @@ role_filter = grid_filters.selectbox(
         "Object Detection (YOLOv8)",
         "Object Detection (MediaPipe)",
         "Image Classification (MediaPipe)",
-        "Face Detector (MediaPipe)"
+        "Face Detector (MediaPipe)",
+        "Object Detection (RoboFlow)",
+        "Object Tracking (RoboFlow)"
     ]
 )
 
@@ -216,6 +220,24 @@ elif role_filter == "Face Detector (MediaPipe)":
         mode_filter == "Camera" and cam_image is not None    
         ):
         model = MediaPipeFaceDetector()
+        grid2.subheader(role_filter)
+        img = model.transform(opencv_image)
+        grid2.image(img, use_column_width = True)
+elif role_filter == "Object Detection (RoboFlow)":
+    if (
+        mode_filter == "Image" and uploaded_image is not None) or (
+        mode_filter == "Camera" and cam_image is not None    
+        ):
+        model = RFObjectDetection()
+        grid2.subheader(role_filter)
+        img = model.transform(opencv_image)
+        grid2.image(img, use_column_width = True)
+elif role_filter == "Object Tracking (RoboFlow)":
+    if (
+        mode_filter == "Image" and uploaded_image is not None) or (
+        mode_filter == "Camera" and cam_image is not None    
+        ):
+        model = RFTracking()
         grid2.subheader(role_filter)
         img = model.transform(opencv_image)
         grid2.image(img, use_column_width = True)

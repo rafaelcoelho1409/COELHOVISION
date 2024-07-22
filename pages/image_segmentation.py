@@ -11,7 +11,9 @@ from functions import (
 )
 from functions import (
     ImageSegmentationYOLO,
-    MediaPipeImageSegmentation
+    MediaPipeImageSegmentation,
+    OpenVINODepthEstimation,
+    OpenVINOImageSegmentation
 )
 
 st.set_page_config(
@@ -45,7 +47,9 @@ role_filter = grid_filters.selectbox(
     label = "Role",
     options = [
         "Image Segmentation (YOLOv8)",
-        "Image Segmentation (MediaPipe)"
+        "Image Segmentation (MediaPipe)",
+        "Depth Estimation (OpenVINO)",
+        "Image Segmentation (OpenVINO)"
     ]
 )
 
@@ -97,4 +101,22 @@ elif role_filter == "Image Segmentation (MediaPipe)":
         img = model.transform(opencv_image)
         grid1.image(opencv_image, use_column_width = True)
         grid2.subheader(role_filter)
+        grid2.image(img, use_column_width = True)
+elif role_filter == "Depth Estimation (OpenVINO)":
+    if (
+        mode_filter == "Image" and uploaded_image is not None) or (
+        mode_filter == "Camera" and cam_image is not None    
+        ):
+        model = OpenVINODepthEstimation()
+        img = model.transform(opencv_image)
+        grid2.header(role_filter)
+        grid2.image(img, use_column_width = True)
+elif role_filter == "Image Segmentation (OpenVINO)":
+    if (
+        mode_filter == "Image" and uploaded_image is not None) or (
+        mode_filter == "Camera" and cam_image is not None    
+        ):
+        model = OpenVINOImageSegmentation()
+        img = model.transform(opencv_image)
+        grid2.header(role_filter)
         grid2.image(img, use_column_width = True)
