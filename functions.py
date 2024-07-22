@@ -196,6 +196,8 @@ class ImageSegmentationYOLO:
 class MediaPipeObjectDetection:
     def __init__(self):
         self.text_color = (255, 0, 0)
+        if not os.path.exists(resource_path("models")):
+            os.mkdir(resource_path("models"))
         #Create an ObjectDetector object
         self.model_path = resource_path(os.path.join('models', 'efficientdet.tflite'))
         if not os.path.exists(self.model_path):
@@ -244,6 +246,8 @@ class MediaPipeObjectDetection:
 #MediaPipeImageClassification
 class MediaPipeImageClassification:
     def __init__(self):
+        if not os.path.exists(resource_path("models")):
+            os.mkdir(resource_path("models"))
         self.model_path = resource_path(os.path.join('models', 'classifier.tflite'))
         if not os.path.exists(self.model_path):
             url = "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/float32/1/efficientnet_lite0.tflite"
@@ -271,6 +275,8 @@ class MediaPipeImageSegmentation:
     def __init__(self):
         self.mask_color = "000000"
         self.background_color = "ffffff"
+        if not os.path.exists(resource_path("models")):
+            os.mkdir(resource_path("models"))
         self.model_path = resource_path(os.path.join('models', 'deeplabv3.tflite'))
         if not os.path.exists(self.model_path):
             url = "https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/1/deeplab_v3.tflite"
@@ -305,6 +311,8 @@ class MediaPipeImageSegmentation:
 #MediaPipeGestureRecognition
 class MediaPipeGestureRecognition:
     def __init__(self):
+        if not os.path.exists(resource_path("models")):
+            os.mkdir(resource_path("models"))
         self.model_path = resource_path(os.path.join('models', 'gesture_recognizer.task'))
         if not os.path.exists(self.model_path):
             url = "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task"
@@ -326,6 +334,8 @@ class MediaPipeGestureRecognition:
 #MediaPipeHandLandmarker
 class MediaPipeHandLandmarker:
     def __init__(self):
+        if not os.path.exists(resource_path("models")):
+            os.mkdir(resource_path("models"))
         self.model_path = resource_path(os.path.join('models', 'hand_landmarker.task'))
         if not os.path.exists(self.model_path):
             url = "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task"
@@ -382,6 +392,8 @@ class MediaPipeHandLandmarker:
 #MediaPipeFaceDetector
 class MediaPipeFaceDetector:
     def __init__(self):
+        if not os.path.exists(resource_path("models")):
+            os.mkdir(resource_path("models"))
         self.model_path = resource_path(os.path.join('models', 'detector.tflite'))
         if not os.path.exists(self.model_path):
             url = "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite"
@@ -446,6 +458,8 @@ class MediaPipeFaceDetector:
 #MediaPipePoseEstimation
 class MediaPipePoseEstimation:
     def __init__(self):
+        if not os.path.exists(resource_path("models")):
+            os.mkdir(resource_path("models"))
         self.model_path = resource_path(os.path.join('models', 'pose_landmarker.task'))
         if not os.path.exists(self.model_path):
             url = "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task"
@@ -506,7 +520,7 @@ class OpenVINOImageSegmentation:
         self.mask_mode = mask_mode
         self.model_xml_url = "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/road-segmentation-adas-0001/FP32/road-segmentation-adas-0001.xml"
         self.model_bin_url = "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/road-segmentation-adas-0001/FP32/road-segmentation-adas-0001.bin"
-        if not os.path.exists("models"):
+        if not os.path.exists(resource_path("models")):
             os.mkdir(resource_path("models"))
         self.model_xml_path = resource_path(os.path.join('models', 'road-segmentation-adas-0001.xml'))
         self.model_bin_path = resource_path(os.path.join('models', 'road-segmentation-adas-0001.bin'))
