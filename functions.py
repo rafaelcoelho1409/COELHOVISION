@@ -1,5 +1,6 @@
 import sys
 import streamlit as st
+import streamfy as sy
 import base64
 import cv2
 import numpy as np
@@ -104,6 +105,16 @@ def resource_path(relative_path):
     except Exception:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
+
+def image_carousel(images, urls):
+    # Convert local image paths to displayable format
+    image_urls = [f"data:image/jpg;base64,{base64.b64encode(open(image, 'rb').read()).decode()}" for image in images]
+    final_urls = image_urls + urls
+    # Use the Streamfy component for the image carousel
+    image_carousel = sy.carousel(
+        items = final_urls,
+    )
+    return image_carousel 
 
 ############################################################################################
 #---------------------------

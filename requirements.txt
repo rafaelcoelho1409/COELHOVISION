@@ -15,3 +15,4 @@ matplotlib==3.8.3
 openvino==2024.0.0
 supervision==0.19.0
 torch==2.2.1
+streamfy==0.3.5

@@ -4,7 +4,8 @@ from streamlit_extras.grid import grid
 from streamlit_extras.switch_page_button import switch_page
 from functions import (
     option_menu,
-    image_border_radius
+    image_border_radius,
+    image_carousel
 )
 
 st.set_page_config(
@@ -48,46 +49,44 @@ if LIVE_CAMERA:
 if ABOUT_US:
     switch_page("about")
 
+with first_column:
+    image_carousel([
+        f"assets/coelhovision{x:0>2}.png" for x in range(1, 11)
+    ], [])
+
 images_json = json.load(open("assets/images.json"))
 second_column.latex("\\Huge{\\textbf{COELHO VISION}}")
-second_column.markdown("<i><h3>Object Detection</h3></i>", unsafe_allow_html = True)
-cols1 = second_column.columns(3)
-for i, x in enumerate([
-    "Face Detection",
-    "Image Classification",
-    "Object Detection"
-]):
-    with cols1[i]:
-        image_border_radius(images_json[x], 10, 100, 25, is_html = True)
-        st.caption(x)
-second_column.markdown("<i><h3>Image Segmentation</h3></i>", unsafe_allow_html = True)
-cols2 = second_column.columns(3)
-for i, x in enumerate([
-    "Image Segmentation"
-]):
-    with cols2[i]:
-        image_border_radius(images_json[x], 10, 100, 25, is_html = True)
-        st.caption(x)
-second_column.markdown("<i><h3>Pose Estimation</h3></i>", unsafe_allow_html = True)
-cols3 = second_column.columns(3)
-for i, x in enumerate([
-    "Gesture Recognition",
-    "Hand Landmarker",
-    "Pose Estimation"
-]):
-    with cols3[i]:
-        image_border_radius(images_json[x], 10, 100, 25, is_html = True)
-        st.caption(x)
-st.divider()
-
-with st.expander(
-    label = "COELHO VISION",
-    expanded = True
-):
-    cols1 = grid(5)
-    cols2 = grid(5)
-    for i in range(1, 6):
-        cols1.image(f"assets/coelhovision{i:0>2}.png")
-    for i in range(6, 11):
-        cols2.image(f"assets/coelhovision{i:0>2}.png")
+second_column.divider()
+second_column_cols = second_column.columns(3)
+with second_column_cols[0]:
+    st.markdown("<i><h3>Object Detection</h3></i>", unsafe_allow_html = True)
+    image_carousel([
+        "assets/home_fullfacedetector.png",
+        "assets/home_objecttracking.jpg"
+    ], [
+        images_json[x] for x in [
+            "Face Detection",
+            "Image Classification",
+            "Object Detection"
+        ]
+    ])
+with second_column_cols[1]:
+    st.markdown("<i><h3>Image Segmentation</h3></i>", unsafe_allow_html = True)
+    image_carousel([
+        "assets/home_depthestimation.png",
+        "assets/home_semanticsegmentation.png"
+    ], [
+        images_json[x] for x in [
+            "Image Segmentation"
+        ]
+    ])
+with second_column_cols[2]:
+    st.markdown("<i><h3>Pose Estimation</h3></i>", unsafe_allow_html = True)
+    image_carousel([], [
+        images_json[x] for x in [
+            "Gesture Recognition",
+            "Hand Landmarker",
+            "Pose Estimation"
+        ]
+    ])
 st.divider()
