@@ -47,7 +47,7 @@ if POSE_ESTIMATION:
 if LIVE_CAMERA:
     switch_page("live camera")
 if ABOUT_US:
-    switch_page("about")
+    switch_page("about us")
 
 with first_column:
     image_carousel([
