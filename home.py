@@ -72,13 +72,10 @@ with second_column_cols[0]:
     ])
     for x in [
         "Full Face Detection",
-        "Image Classification (VGG16)",
-        "Object Detection (YOLOv8)",
-        "Object Detection (MediaPipe)",
-        "Image Classificaton (MediaPipe)",
-        "Face Detector (MediaPipe)",
-        "Object Detection (RoboFlow)",
-        "Object Tracking (RoboFlow)"
+        "Image Classification",
+        "Object Detection",
+        "Face Detector",
+        "Object Tracking"
     ]:
         st.markdown(f"- **{x}**")
 with second_column_cols[1]:
@@ -92,10 +89,8 @@ with second_column_cols[1]:
         ]
     ])
     for x in [
-        "Image Segmentation (YOLOv8)",
-        "Image Segmentation (MediaPipe)",
-        "Depth Estimation (OpenVINO)",
-        "Image Segmentation (OpenVINO)"
+        "Image Segmentation",
+        "Depth Estimation",
     ]:
         st.markdown(f"- **{x}**")
 with second_column_cols[2]:
@@ -110,8 +105,7 @@ with second_column_cols[2]:
     for x in [
         "Gesture Recognition",
         "Hand Landmarker",
-        "Pose Estimation (MediaPipe)",
-        "Pose Estimation (OpenVINO)"
+        "Pose Estimation",
     ]:
         st.markdown(f"- **{x}**")
 second_column.divider()
