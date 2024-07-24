@@ -122,7 +122,7 @@ with second_column_cols2[0]:
         f"assets/software{x}.png" for x in range(1, 5)
     ], [])
 with second_column_cols2[1]:
-    st.markdown(f"""<div style='font-size:20px'>
+    st.markdown(f"""<div style='font-size:15px'>
     COELHO VISION is an advanced Computer Vision software offering features 
     like Object Detection, Object Tracking, Image Classification, Image Segmentation, 
     Depth Estimation, and Pose Estimation. The Windows version provides a significant 
