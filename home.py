@@ -135,5 +135,5 @@ second_column.link_button(
 second_column.markdown("""
 **Disclaimer:** for Linux and Mac versions, there is no software version.
 You must clone the source repository and run it using Python 
-([GitHub repository](https://github.com/rafaelcoelho1409/COELHOVISION))""")
+([GitHub repository](https://github.com/rafaelcoelho1409/COELHOVISIONEXE))""")
 st.divider()
