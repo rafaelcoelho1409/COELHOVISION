@@ -56,7 +56,7 @@ with first_column:
 
 images_json = json.load(open("assets/images.json"))
 second_column.latex("\\Huge{\\textbf{COELHO VISION}}")
-second_column.divider()
+#second_column.divider()
 second_column_cols = second_column.columns(3)
 with second_column_cols[0]:
     st.markdown("<i><h3>Object Detection</h3></i>", unsafe_allow_html = True)
@@ -70,6 +70,17 @@ with second_column_cols[0]:
             "Object Detection"
         ]
     ])
+    for x in [
+        "Full Face Detection",
+        "Image Classification (VGG16)",
+        "Object Detection (YOLOv8)",
+        "Object Detection (MediaPipe)",
+        "Image Classificaton (MediaPipe)",
+        "Face Detector (MediaPipe)",
+        "Object Detection (RoboFlow)",
+        "Object Tracking (RoboFlow)"
+    ]:
+        st.markdown(f"- **{x}**")
 with second_column_cols[1]:
     st.markdown("<i><h3>Image Segmentation</h3></i>", unsafe_allow_html = True)
     image_carousel([
@@ -80,6 +91,13 @@ with second_column_cols[1]:
             "Image Segmentation"
         ]
     ])
+    for x in [
+        "Image Segmentation (YOLOv8)",
+        "Image Segmentation (MediaPipe)",
+        "Depth Estimation (OpenVINO)",
+        "Image Segmentation (OpenVINO)"
+    ]:
+        st.markdown(f"- **{x}**")
 with second_column_cols[2]:
     st.markdown("<i><h3>Pose Estimation</h3></i>", unsafe_allow_html = True)
     image_carousel([], [
@@ -89,4 +107,39 @@ with second_column_cols[2]:
             "Pose Estimation"
         ]
     ])
+    for x in [
+        "Gesture Recognition",
+        "Hand Landmarker",
+        "Pose Estimation (MediaPipe)",
+        "Pose Estimation (OpenVINO)"
+    ]:
+        st.markdown(f"- **{x}**")
+second_column.divider()
+second_column.latex("\\huge{\\textbf{COELHO VISION - Software Version}}")
+second_column_cols2 = second_column.columns(2)
+with second_column_cols2[0]:
+    image_carousel([
+        f"assets/software{x}.png" for x in range(1, 5)
+    ], [])
+with second_column_cols2[1]:
+    st.markdown(f"""<div style='font-size:20px'>
+    COELHO VISION is an advanced Computer Vision software offering features 
+    like Object Detection, Object Tracking, Image Classification, Image Segmentation, 
+    Depth Estimation, and Pose Estimation. The Windows version provides a significant 
+    performance boost, minimizing latency and ensuring a smoother, faster experience 
+    compared to the web version.<br><br>
+    Optimize your computer vision projects with the powerful and reliable Windows 
+    version of COELHO VISION. Click the link below to download and experience the difference!
+    <br><br></div>
+    """, unsafe_allow_html = True)
+second_column.link_button(
+    label = "Download COELHO VISION software (Windows version)",
+    url = "https://drive.google.com/file/d/1RyA8GgkJQDJuv6afNIKWVq-fuyhbtSNY/view?usp=drive_link",
+    type = "primary",
+    use_container_width = True
+)
+second_column.markdown("""
+**Disclaimer:** for Linux and Mac versions, there is no software version.
+You must clone the source repository and run it using Python 
+([GitHub repository](https://github.com/rafaelcoelho1409/COELHOVISION))""")
 st.divider()
