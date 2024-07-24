@@ -71,7 +71,6 @@ with second_column_cols[0]:
         ]
     ])
     for x in [
-        "Full Face Detection",
         "Image Classification",
         "Object Detection",
         "Face Detector",
