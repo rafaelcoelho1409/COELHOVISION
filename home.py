@@ -109,7 +109,8 @@ with second_column_cols[2]:
     ]:
         st.markdown(f"- **{x}**")
 second_column.divider()
-second_column.latex("\\huge{\\textbf{COELHO VISION - Software Version}}")
+second_column.latex("\\huge{\\textbf{COELHO VISION}}")
+second_column.latex("\\Large{\\textbf{Software Version}}")
 second_column_cols2 = second_column.columns(2)
 with second_column_cols2[0]:
     image_carousel([
