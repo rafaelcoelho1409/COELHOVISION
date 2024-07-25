@@ -51,7 +51,7 @@ role_filter = grid_filters.selectbox(
     label = "Role",
     options = [
         "Full Face Detection",
-        "Image Classification (VGG16)",
+        #"Image Classification (VGG16)",
         "Object Detection (YOLOv8)",
         "Object Detection (MediaPipe)",
         "Image Classification (MediaPipe)",
@@ -140,34 +140,34 @@ if role_filter == "Full Face Detection":
         detector.mouth_minNeighbors = mouth_minNeighbors
         transformed_image = detector.transform(opencv_image)
         grid2.image(transformed_image, use_column_width = True)
-elif role_filter == "Image Classification (VGG16)":
-    if (
-        mode_filter == "Image" and uploaded_image is not None) or (
-        mode_filter == "Camera" and cam_image is not None    
-        ):
-        model = tf.keras.applications.vgg16.VGG16(
-            weights = "imagenet",
-            include_top = True
-        )
-        tensor_img = tf.convert_to_tensor(opencv_image)
-        tensor_reshaped = tf.image.resize(tensor_img, (224, 224))
-        model.compile(
-            optimizer = "RMSprop",
-            loss = "categorical_crossentropy"
-        )
-        tensor_pred = tf.expand_dims(tensor_reshaped, axis = 0)
-        tensor_pred = tf.keras.applications.imagenet_utils.preprocess_input(tensor_pred)
-        probabilities = model.predict(tensor_pred)
-        P = tf.keras.applications.imagenet_utils.decode_predictions(probabilities)
-        grid2.header(role_filter)
-        grid2.subheader("Predictions")
-        grid2_cols = grid2.columns(5)
-        for i in range(5):
-            grid2_cols[i].metric(
-                label = P[0][i][1].replace("_", " ").title(),
-                value = "{:.2f}%".format(P[0][i][2] * 100)
-            )
-        grid2.image(opencv_image, use_column_width = True)
+#elif role_filter == "Image Classification (VGG16)":
+#    if (
+#        mode_filter == "Image" and uploaded_image is not None) or (
+#        mode_filter == "Camera" and cam_image is not None    
+#        ):
+#        model = tf.keras.applications.vgg16.VGG16(
+#            weights = "imagenet",
+#            include_top = True
+#        )
+#        tensor_img = tf.convert_to_tensor(opencv_image)
+#        tensor_reshaped = tf.image.resize(tensor_img, (224, 224))
+#        model.compile(
+#            optimizer = "RMSprop",
+#            loss = "categorical_crossentropy"
+#        )
+#        tensor_pred = tf.expand_dims(tensor_reshaped, axis = 0)
+#        tensor_pred = tf.keras.applications.imagenet_utils.preprocess_input(tensor_pred)
+#        probabilities = model.predict(tensor_pred)
+#        P = tf.keras.applications.imagenet_utils.decode_predictions(probabilities)
+#        grid2.header(role_filter)
+#        grid2.subheader("Predictions")
+#        grid2_cols = grid2.columns(5)
+#        for i in range(5):
+#            grid2_cols[i].metric(
+#                label = P[0][i][1].replace("_", " ").title(),
+#                value = "{:.2f}%".format(P[0][i][2] * 100)
+#            )
+#        grid2.image(opencv_image, use_column_width = True)
 elif role_filter == "Object Detection (YOLOv8)":
     if (
         mode_filter == "Image" and uploaded_image is not None) or (
